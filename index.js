@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 // midlewere
 app.use(cors());
@@ -36,17 +36,30 @@ async function run() {
     // brands end
     //=============
 
-    //phones start
+    //brand details start
     //============
     app.get("/brand-details/:id", async (req, res) => {
       const brand = req.params.id;
       const brandQuery = { brandName: brand };
       const result = await phones.find(brandQuery).toArray();
-      console.log(result);
+
       res.send(result);
     });
-    //phones end
+    //brand details end
     //============
+
+    // phone details start
+    //===================
+    app.get("/phone-details/:id", async (req, res) => {
+      //   console.log(req.params.id);
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const phoneDetails = await phones.find(query).toArray();
+      console.log(phoneDetails);
+      res.send(phoneDetails);
+    });
+    // phone details end
+    //===================
   } finally {
   }
 }
