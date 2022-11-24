@@ -25,16 +25,28 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const brand = client.db("assigement12").collection("phonesBrand");
+    const phones = client.db("assigement12").collection("phones");
     // brands start
     //=============
     app.get("/brands", async (req, res) => {
       const query = {};
       const brands = await brand.find(query).toArray();
       res.send(brands);
-      console.log(brands);
     });
     // brands end
     //=============
+
+    //phones start
+    //============
+    app.get("/brand-details/:id", async (req, res) => {
+      const brand = req.params.id;
+      const brandQuery = { brandName: brand };
+      const result = await phones.find(brandQuery).toArray();
+      console.log(result);
+      res.send(result);
+    });
+    //phones end
+    //============
   } finally {
   }
 }
