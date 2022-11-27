@@ -26,6 +26,10 @@ async function run() {
   try {
     const brand = client.db("assigement12").collection("phonesBrand");
     const phones = client.db("assigement12").collection("phones");
+    const userCollection = client.db("assigement12").collection("user");
+    const googleUsersCollection = client
+      .db("assigement12")
+      .collection("googleUsers");
     // brands start
     //=============
     app.get("/brands", async (req, res) => {
@@ -55,11 +59,59 @@ async function run() {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const phoneDetails = await phones.find(query).toArray();
-      console.log(phoneDetails);
+
       res.send(phoneDetails);
     });
     // phone details end
     //===================
+
+    //.........user info start.............
+    //===============================
+    app.post("/user", async (req, res) => {
+      const user = req.body;
+      const result = await userCollection.insertOne(user);
+      res.send(result);
+    });
+    //.........user info end.............
+    //===============================
+
+    // ..........find a user...........
+    //=================================
+    app.get("/user/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { email: id };
+      const result = await userCollection.find(query).toArray();
+      res.send(result);
+    });
+    //............find a user...........
+    //==================================
+
+    // .........Add Google User.........
+    //=================================
+    app.post("/googleuser", async (req, res) => {
+      const email = req.body.email;
+      const query = { email: email };
+      const find = await googleUsersCollection.findOne(query);
+      if (find) {
+        return;
+      }
+      const GoogleUser = req.body;
+      const result = await googleUsersCollection.insertOne(GoogleUser);
+      res.send(result);
+    });
+    //..........Add Google User...........
+    //=====================================
+
+    // ...........Google user.............//
+    //===================================//
+    app.get("/user/google/:id", async (req, res) => {
+      const paramsEmail = req.params.id;
+      const query = { email: paramsEmail };
+      const result = await googleUsersCollection.find(query).toArray();
+      res.send(result);
+    });
+    //...............Google User...........//
+    //====================================//
   } finally {
   }
 }
