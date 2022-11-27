@@ -112,6 +112,14 @@ async function run() {
     });
     //...............Google User...........//
     //====================================//
+    app.post("/upload-phone", async (req, res) => {
+      const phone = req.body;
+      const result = await phones.insertOne(phone);
+      res.send(result);
+    });
+    //............upload phone............//
+    //====================================//
+    app.post("/");
   } finally {
   }
 }
