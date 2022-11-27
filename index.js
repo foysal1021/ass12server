@@ -120,6 +120,16 @@ async function run() {
     //............upload phone............//
     //====================================//
     app.post("/");
+
+    //.............my product............//
+    //=================================//
+    app.get("/myproduct/:id", async (req, res) => {
+      const paramsEmail = req.params.id;
+
+      const query = { email: paramsEmail };
+      const result = await phones.find(query).toArray();
+      res.send(result);
+    });
   } finally {
   }
 }
