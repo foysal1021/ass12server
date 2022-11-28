@@ -151,6 +151,22 @@ async function run() {
       const result = await ordersCollection.find(query).toArray();
       res.send(result);
     });
+    //.............get my orders..........//
+    //==================================//
+
+    //.............updated staus.............//
+    //======================================//
+    app.get("/order/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          status: "sold out",
+        },
+      };
+      const result = await phones.updateOne(filter, updateDoc, options);
+    });
   } finally {
   }
 }
