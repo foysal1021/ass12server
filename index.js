@@ -167,6 +167,19 @@ async function run() {
       };
       const result = await phones.updateOne(filter, updateDoc, options);
     });
+    //................updated staus..............//
+    //==========================================//
+
+    //.................delete phone...............//
+    //===========================================//
+    app.delete("/phones/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await phones.deleteOne(query);
+      res.send(result);
+    });
+    //..................delete phone.............//
+    //==========================================//
   } finally {
   }
 }
