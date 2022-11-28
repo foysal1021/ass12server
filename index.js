@@ -26,6 +26,7 @@ async function run() {
   try {
     const brand = client.db("assigement12").collection("phonesBrand");
     const phones = client.db("assigement12").collection("phones");
+    const ordersCollection = client.db("assigement12").collection("orders");
     const userCollection = client.db("assigement12").collection("user");
     const googleUsersCollection = client
       .db("assigement12")
@@ -119,7 +120,6 @@ async function run() {
     });
     //............upload phone............//
     //====================================//
-    app.post("/");
 
     //.............my product............//
     //=================================//
@@ -128,6 +128,27 @@ async function run() {
 
       const query = { email: paramsEmail };
       const result = await phones.find(query).toArray();
+      res.send(result);
+    });
+    //...............my product..........//
+    //======================================
+
+    //................my order............//
+    //==================================//
+    app.post("/order", async (req, res) => {
+      const order = req.body;
+      const result = await ordersCollection.insertOne(order);
+      res.send(result);
+    });
+    //...............my order..............//
+    //===================================//
+
+    //............get my order.............//
+    //===================================//
+    app.get("/myorder/:id", async (req, res) => {
+      const paramsEmail = req.params.id;
+      const query = { email: paramsEmail };
+      const result = await ordersCollection.find(query).toArray();
       res.send(result);
     });
   } finally {
