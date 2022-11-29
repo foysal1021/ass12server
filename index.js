@@ -227,6 +227,22 @@ async function run() {
       const result = await userCollection.find(query).toArray();
       res.send(result);
     });
+
+    // all buyer
+    app.get("/all-user", async (req, res) => {
+      const query = { seller: "NO" };
+      const result = await userCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    // delete user
+    app.delete("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const query = { _id: ObjectId(id) };
+      const result = await userCollection.deleteOne(query);
+      res.send(result);
+    });
   } finally {
   }
 }
