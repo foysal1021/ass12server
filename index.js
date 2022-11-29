@@ -26,6 +26,8 @@ async function run() {
   try {
     const brand = client.db("assigement12").collection("phonesBrand");
     const phones = client.db("assigement12").collection("phones");
+    const ProductAdsCollection = client.db("assigement12").collection("ads");
+
     const ordersCollection = client.db("assigement12").collection("orders");
     const userCollection = client.db("assigement12").collection("user");
     const googleUsersCollection = client
@@ -166,6 +168,7 @@ async function run() {
         },
       };
       const result = await phones.updateOne(filter, updateDoc, options);
+      res.send(result);
     });
     //................updated staus..............//
     //==========================================//
@@ -178,8 +181,52 @@ async function run() {
       const result = await phones.deleteOne(query);
       res.send(result);
     });
-    //..................delete phone.............//
-    //==========================================//
+
+    //........ads item remove _id........
+    //=======================================//
+    app.get("/ADSid/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await phones.find(query).project({ _id: 0 }).toArray();
+      res.send(result);
+    });
+    //.............ads item post in.............//
+    //=========================================//
+    app.post("/adsItem", async (req, res) => {
+      const item = req.body;
+      const img = req.body.img;
+      const query = { img: img };
+      const find = await ProductAdsCollection.findOne(query);
+      if (find) {
+        return;
+      }
+      const result = await ProductAdsCollection.insertOne(item);
+      res.send(result);
+    });
+
+    // ............get advertised Product.........//
+    //=============================================
+    app.get("/advertisedProduct", async (req, res) => {
+      const query = {};
+      const result = await ProductAdsCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    // updated // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    app.get("/orderId/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await phones.find(query).toArray();
+
+      console.log(result);
+    });
+
+    //all sellers
+    app.get("/allsellers", async (req, res) => {
+      const query = { seller: "YES" };
+      const result = await userCollection.find(query).toArray();
+      res.send(result);
+    });
   } finally {
   }
 }
